@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Добавленные книги</h1>
-{% for item in news%}
+{% for item in books%}
  <style type="text/css">
    TD.leftcol {
     width: 180px; 
@@ -21,10 +21,10 @@
    </table>
    {% if current_user.is_authenticated and current_user == item.user %}
     <div>
-        <a href="/news/{{ item.id }}" class="btn btn-warning">
+        <a href="/book/{{ item.id }}" class="btn btn-warning">
             Изменить
         </a>
-        <a href="/news_delete/{{ item.id }}" class="btn btn-danger">
+        <a href="/book_delete/{{ item.id }}" class="btn btn-danger">
             Удалить
         </a>
     </div>
