@@ -1,5 +1,5 @@
 import datetime
-
+import os
 from flask import Flask, request, abort, session, make_response, render_template, redirect
 from data import db_session
 from data.users import User
@@ -162,4 +162,6 @@ def register():
 
 
 if __name__ == '__main__':
-    main()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='127.0.0.1', port=port)
+
