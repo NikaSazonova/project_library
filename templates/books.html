@@ -21,6 +21,7 @@
                 {{ error }}
             </p>
         {% endfor %}
+    </p>
     <p>
         {{ form.pic_url.label }}<br>
         {{ form.pic_url(class="form-control") }}<br>
@@ -39,6 +40,8 @@
             </p>
         {% endfor %}
     </p>
+        <p>{{file_label}}</p>
+        <p><input type="file" name="f"></p><br>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     {{message}}
 </form>

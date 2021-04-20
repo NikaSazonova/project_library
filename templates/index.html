@@ -1,7 +1,7 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 
 {% block content %}
-<h1>Добавленные книги</h1>
+<h1 align="center">Добавленные книги</h1><br>
 {% for item in books%}
  <style type="text/css">
    TD.leftcol {
@@ -13,18 +13,22 @@
     <table width="100%" cellspacing="0" cellpadding="0">
        <tr> 
         <td class="leftcol"><img src="{{item.pic_url}}" 
-        width="150" height="180" alt="здесь должна была быть картинка, но не нашлась"></td>
+        width="155" height="200" alt="здесь должна была быть картинка, но не нашлась"></td>
         <td valign="top"> <h2> {{item.title}} </h2> <p> {{item.content}} </p>
         <p> Автор - {{item.author}}, Дата добавления - {{item.created_date}} </p> 
+           <div>
+           <a href="/book_page/{{ item.id }}"><right>Подробнее</right></a>
+           </div>
         </td>
        </tr>
    </table>
    {% if current_user.is_authenticated and current_user == item.user %}
+ 
     <div>
-        <a href="/book/{{ item.id }}" class="btn btn-warning">
+        <a href="/book/{{ item.id }}" class="btn btn-outline-info btn-sm">
             Изменить
         </a>
-        <a href="/book_delete/{{ item.id }}" class="btn btn-danger">
+        <a href="/book_delete/{{ item.id }}" class="btn btn-outline-danger btn-sm">
             Удалить
         </a>
     </div>
