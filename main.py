@@ -1,5 +1,5 @@
 import datetime
-
+import os
 from flask import Flask, request, abort, session, make_response, render_template, redirect
 from data import db_session
 from data.users import User
@@ -57,7 +57,7 @@ def add_book():
         db_sess.merge(current_user)
         db_sess.commit()
         return redirect('/')
-    return render_template('books.html', title='Добавление новости',
+    return render_template('books.html', file_label='Файл книги', title='Добавление новости',
                            form=form)
 
 
@@ -112,6 +112,15 @@ def book_delete(id):
     return redirect('/')
 
 
+@app.route("/book_page/<int:id>")
+def page(id):
+    db_sess = db_session.create_session()
+    book = db_sess.query(Books).filter(Books.id == id,
+                                       Books.user == current_user
+                                       ).first()
+    return render_template("page.html", item=book)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -153,4 +162,6 @@ def register():
 
 
 if __name__ == '__main__':
-    main()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='127.0.0.1', port=port)
+
