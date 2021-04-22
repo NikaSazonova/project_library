@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <style>
+   p { 
+    font-size: 18pt;  
+   }
+  </style>
+
+ <p> </p>
+      <a href="/" class="btn btn-outline-info btn-block">
+        Назад
+      </a> <br>
+
+<h1 align="center">{{item.title}}</h1><br>
+ <style type="text/css">
+   TD.leftcol {
+    width: 480px; 
+    vertical-align: top; 
+   }
+ </style>
+    <div class="col-md6 border rounded">
+    <table width="100%" cellspacing="0" cellpadding="0">
+       <tr> 
+        <td class="leftcol"><img src="{{item.pic_url}}" 
+        width="450" height="500" alt="здесь должна была быть картинка, но не нашлась"></td>
+        <td valign="top"> <p> {{item.content}} </p>
+        <p> Автор: {{item.author}} </p>
+        <p>Дата добавления: {{item.created_date}} </p> 
+        </td>
+       </tr>
+   </table>
+   {% if current_user.is_authenticated and current_user == item.user %}
+ 
+    <div>
+        <a href="/book/{{ item.id }}" class="btn btn-outline-info btn-lg">
+            Изменить
+        </a>
+        <a href="/book_delete/{{ item.id }}" class="btn btn-outline-danger btn-lg">
+            Удалить
+        </a>
+        <a href="/book_mark/{{ item.id }}" class="btn btn-outline-warning btn-lg" download>
+            Разметить
+        </a>
+    </div>
+   {% endif %}
+    </div>
+    <p> </p>
+{% endblock %}

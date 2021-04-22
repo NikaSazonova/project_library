@@ -1,20 +1,31 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
-<h1 align="center">Добавленные книги</h1><br>
-{% for item in books%}
+<head>
+   <style type="text/css">
+    p.dd {
+    width: 700px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    }
+ </style>
  <style type="text/css">
    TD.leftcol {
     width: 180px; 
     vertical-align: top; 
    }
- </style>
+   </style>
+</head>
+<h1 align="center">Добавленные книги</h1><br>
+<p><input type="search" name="s" placeholder="Поиск по книгам"><input type="submit" value="Найти"></p>
+{% for item in books%}
     <div class="col-md6 border rounded">
     <table width="100%" cellspacing="0" cellpadding="0">
        <tr> 
         <td class="leftcol"><img src="{{item.pic_url}}" 
         width="155" height="200" alt="здесь должна была быть картинка, но не нашлась"></td>
-        <td valign="top"> <h2> {{item.title}} </h2> <p> {{item.content}} </p>
+        <td valign="top"> <h2> {{item.title}} </h2> <p class="dd">{{item.content}}</p>
         <p> Автор - {{item.author}}, Дата добавления - {{item.created_date}} </p> 
            <div>
            <a href="/book_page/{{ item.id }}"><right>Подробнее</right></a>

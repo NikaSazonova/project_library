@@ -1,5 +1,6 @@
 import datetime
 import os
+from marking import marking
 from flask import Flask, request, abort, session, make_response, render_template, redirect
 from data import db_session
 from data.users import User
@@ -121,6 +122,16 @@ def page(id):
     return render_template("page.html", item=book)
 
 
+@app.route("/book_mark/<int:id>")
+def mark(id):
+    db_sess = db_session.create_session()
+    book = db_sess.query(Books).filter(Books.id == id,
+                                       Books.user == current_user
+                                       ).first()
+
+    return render_template("page.html", item=book)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -162,6 +173,5 @@ def register():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='127.0.0.1', port=port)
+    main()
 
