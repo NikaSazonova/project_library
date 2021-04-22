@@ -7,7 +7,7 @@
       </a> <br>
 
 <h1> {{title}} </h1>
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     <p>
         {{ form.author.label }}<br>
@@ -45,8 +45,13 @@
             </p>
         {% endfor %}
     </p>
-        <p>{{file_label}}</p>
-        <p><input type="file" name="f"></p><br>
+        <p>{{form.file.label}}</p>
+        {{ form.file(class="form-control-file") }}<br>
+        {% for error in form.file.errors %}
+            <p content="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     {{message}}
 </form>

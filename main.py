@@ -1,6 +1,6 @@
 import datetime
 import os
-# from marking import marking
+from instance.marking import marking
 from flask import Flask, request, abort, session, make_response, render_template, redirect
 from data import db_session
 from data.users import User
@@ -56,13 +56,15 @@ def add_book():
         book.pic_url = form.pic_url.data
         book.author = form.author.data
         book.content = form.content.data
-        book.file = form.file.data.save(os.path.join(
+        book.file_name = form.file.data.filename
+        book.marked_file_name = f"marked_{form.file.data.filename}"
+        form.file.data.save(os.path.join(
             app.auto_find_instance_path(), form.file.data.filename))
         current_user.books.append(book)
         db_sess.merge(current_user)
         db_sess.commit()
         return redirect('/')
-    return render_template('books.html', file_label='Файл книги', title='Добавление новости',
+    return render_template('books.html', file_label='Файл книги (.txt)', title='Добавление книги',
                            form=form)
 
 
@@ -132,8 +134,8 @@ def mark(id):
     book = db_sess.query(Books).filter(Books.id == id,
                                        Books.user == current_user
                                        ).first()
-
-    return render_template("page.html", item=book)
+    if marking(book.file_name) == True:
+        return rf'C:\Users\Я\Desktop\yal\project_library\instance\{book.marked_file_name}'
 
 
 @app.route('/login', methods=['GET', 'POST'])
