@@ -40,9 +40,9 @@
         <a href="/book_delete/{{ item.id }}" class="btn btn-outline-danger btn-lg">
             Удалить
         </a>
-        <a href="C:\Users\Я\Desktop\yal\project_library\instance\{{ item.marked_file_name}}" class="btn btn-outline-warning btn-lg" download>
-            Разметить
-        </a>
+        <a href="/book_mark/{{item.id}}" class="btn btn-outline-warning btn-lg download="">
+	<button>Разметить</button>
+        </a>   
     </div>
    {% endif %}
     </div>

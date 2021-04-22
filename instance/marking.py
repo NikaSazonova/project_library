@@ -24,16 +24,16 @@ correct_encoding = ''
 def marking(file_name):
     for enc in encoding:
         try:
-            open(rf'C:\Users\Я\Desktop\yal\project_library\instance\{file_name}', encoding=enc).read()
+            open(rf'C:\Users\Я\Desktop\yal\project_library\instance\{file_name}', 'r', encoding=enc)
         except (UnicodeDecodeError, LookupError):
             pass
         else:
             correct_encoding = enc
     morph = pymorphy2.MorphAnalyzer()
-    f_open = open(rf'C:\Users\Я\Desktop\yal\project_library\instance\{file_name}', 'r', encoding='ANSI')
+    f_open = open(rf'C:\Users\Я\Desktop\yal\project_library\instance\{file_name}', 'r', encoding=correct_encoding)
     name_res = f"marked_{file_name}"
     text = list()
-    f = open(f'{name_res}.csv', 'w', newline='', encoding="cp1251")
+    f = open(rf'C:\Users\Я\Desktop\yal\project_library\instance\{name_res}.csv', 'w', newline='', encoding="cp1251")
     writer = csv.writer(f, delimiter=';', quoting=csv.QUOTE_MINIMAL)
     writer.writerow(names)
     exclude = set(string.punctuation)

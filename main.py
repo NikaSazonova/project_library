@@ -7,7 +7,7 @@ from data.users import User
 from data.books import Books
 from forms.user import RegisterForm, LoginForm
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from data.book_download import book_load, book_download, folder
+from data.book_download import book_load, book_download, folder, a
 from forms.book import BookForm
 
 app = Flask(__name__)
@@ -21,6 +21,7 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 def main():
     db_session.global_init("db/library.db")
+    app.run()
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
 
@@ -63,6 +64,8 @@ def add_book():
         current_user.books.append(book)
         db_sess.merge(current_user)
         db_sess.commit()
+        if marking(book.file_name):
+            book_load(rf'C:\Users\Я\Desktop\yal\project_library\instance\{book.marked_file_name}.csv', f'{book.marked_file_name}.csv')
         return redirect('/')
     return render_template('books.html', file_label='Файл книги (.txt)', title='Добавление книги',
                            form=form)
@@ -123,7 +126,6 @@ def book_delete(id):
 def page(id):
     db_sess = db_session.create_session()
     book = db_sess.query(Books).filter(Books.id == id,
-                                       Books.user == current_user
                                        ).first()
     return render_template("page.html", item=book)
 
@@ -134,8 +136,10 @@ def mark(id):
     book = db_sess.query(Books).filter(Books.id == id,
                                        Books.user == current_user
                                        ).first()
-    if marking(book.file_name) == True:
-        return rf'C:\Users\Я\Desktop\yal\project_library\instance\{book.marked_file_name}'
+    for i in a:
+        if i['name'] == f"{book.marked_file_name}.csv":
+            url_ = i['file']
+            return render_template('mark.html', url=url_)
 
 
 @app.route('/login', methods=['GET', 'POST'])
