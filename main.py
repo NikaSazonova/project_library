@@ -1,12 +1,13 @@
 import datetime
 import os
-from marking import marking
+# from marking import marking
 from flask import Flask, request, abort, session, make_response, render_template, redirect
 from data import db_session
 from data.users import User
 from data.books import Books
 from forms.user import RegisterForm, LoginForm
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from data.book_download import book_load, book_download, folder
 from forms.book import BookForm
 
 app = Flask(__name__)
@@ -55,6 +56,8 @@ def add_book():
         book.pic_url = form.pic_url.data
         book.author = form.author.data
         book.content = form.content.data
+        book.file = form.file.data.save(os.path.join(
+            app.auto_find_instance_path(), form.file.data.filename))
         current_user.books.append(book)
         db_sess.merge(current_user)
         db_sess.commit()
@@ -175,4 +178,3 @@ def register():
 
 if __name__ == '__main__':
     main()
-
