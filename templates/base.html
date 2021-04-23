@@ -3,29 +3,27 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css" integrity="sha384-H4X+4tKc7b8s4GoMrylmy2ssQYpDHoqzPa9aKXbDwPoPUA3Ra8PA5dGzijN+ePnH" crossorigin="anonymous">
     <title> Библиотека </title>
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="#">Онлайн-библиотека</a>
-        {% if current_user.is_authenticated %}
+    <nav class="navbar navbar-default navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">Онлайн-библиотека</a>
+    {% if current_user.is_authenticated %}
     <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
-{% else %}
+   {% else %}
     <p>
-        <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
-        <a class="btn btn-success" href="/login">Войти</a>
+        <a class="btn btn-warning " href="/register">Зарегистрироваться</a>
+        <a class="btn btn-secondary" href="/login">Войти</a>
     </p>
-{% endif %}
+   {% endif %}
         {% if current_user.is_authenticated %}
     <a href="/book" class="btn btn-secondary">Добавить книгу</a>
-{% endif %}
-    </nav>
+   {% endif %}
+  </nav>
 </header>
+
 <!-- Begin page content -->
 <main role="main" class="container">
     {% block content %}{% endblock %}

@@ -18,13 +18,16 @@
    </style>
 </head>
 <h1 align="center">Добавленные книги</h1><br>
-<p><input type="search" name="s" placeholder="Поиск по книгам"><input type="submit" value="Найти"></p>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="text" placeholder="Поиск по книгам">
+      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Найти</button>
+    </form><br>
 {% for item in books%}
     <div class="col-md6 border rounded">
     <table width="100%" cellspacing="0" cellpadding="0">
        <tr> 
         <td class="leftcol"><img src="{{item.pic_url}}" 
-        width="155" height="200" alt="здесь должна была быть картинка, но не нашлась"></td>
+        width="170" height="210" alt="здесь должна была быть картинка, но не нашлась"></td>
         <td valign="top"> <h2> {{item.title}} </h2> <p class="dd">{{item.content}}</p>
         <p> Автор - {{item.author}}, Дата добавления - {{item.created_date}} </p> 
            <div>
@@ -34,7 +37,6 @@
        </tr>
    </table>
    {% if current_user.is_authenticated and current_user == item.user %}
- 
     <div>
         <a href="/book/{{ item.id }}" class="btn btn-outline-info btn-sm">
             Изменить

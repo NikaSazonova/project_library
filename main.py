@@ -1,7 +1,7 @@
 import datetime
 import os
 from instance.marking import marking
-from flask import Flask, request, abort, session, make_response, render_template, redirect
+from flask import Flask, request, abort, session, make_response, render_template, redirect, url_for
 from data import db_session
 from data.users import User
 from data.books import Books
@@ -146,11 +146,11 @@ def mark(id):
     book = db_sess.query(Books).filter(Books.id == id
                                        ).first()
     a = list(disk.listdir("/book"))
-    print(*a)
+    ok = url_for('static', filename='img/ok.png')
     for i in a:
         if i['name'] == f"{book.marked_file_name}.csv":
             url_ = i['public_url']
-            return render_template('mark.html', url=url_)
+            return render_template('mark.html', url=url_, ok_pic=ok)
 
 
 @app.route("/book_link/<int:id>")
@@ -159,11 +159,11 @@ def load(id):
     book = db_sess.query(Books).filter(Books.id == id
                                        ).first()
     a = list(disk.listdir("/book"))
-    print(*a)
+    ok = url_for('static', filename='img/ok.png')
     for i in a:
         if i['name'] == f"{book.file_name}":
             url_ = i['public_url']
-            return render_template('mark.html', url=url_)
+            return render_template('mark.html', url=url_, ok_pic=ok)
 
 
 @app.route('/login', methods=['GET', 'POST'])
