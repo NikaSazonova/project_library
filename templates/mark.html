@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    p.url {
+    width: 700px;
+    word-break: break-all;
+    }
+</style>
+ <p> </p>
+      <a href="/" class="btn btn-outline-info btn-block">
+        Назад
+      </a> <br>
+   <p>Ссылка для скачивания:</p> <br>
+   <p class="url"> {{url}} </p>
+    <div>
+        <a href=" {{ url }} target="_blank">Скачать файл</a>
+   </div>
+
+
+{% endblock %}
