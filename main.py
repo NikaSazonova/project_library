@@ -7,8 +7,11 @@ from data.users import User
 from data.books import Books
 from forms.user import RegisterForm, LoginForm
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from data.book_download import book_load, book_download, folder, a
+from data.book_download import book_load, book_download, folder
 from forms.book import BookForm
+import yadisk
+
+disk = yadisk.YaDisk(token='AQAAAABUIJphAAcUIlSKz5SMo0q9gbAxBIW03Uc')
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -64,8 +67,13 @@ def add_book():
         current_user.books.append(book)
         db_sess.merge(current_user)
         db_sess.commit()
+        book_load(rf'C:\Users\Я\Desktop\yal\project_library\instance\{book.file_name}',
+                  f'{book.file_name}')
         if marking(book.file_name):
-            book_load(rf'C:\Users\Я\Desktop\yal\project_library\instance\{book.marked_file_name}.csv', f'{book.marked_file_name}.csv')
+            book_load(rf'C:\Users\Я\Desktop\yal\project_library\instance\{book.marked_file_name}.csv',
+                      f'{book.marked_file_name}.csv')
+        disk.publish(f"/book/{book.file_name}")
+        disk.publish(f"/book/{book.marked_file_name}.csv")
         return redirect('/')
     return render_template('books.html', file_label='Файл книги (.txt)', title='Добавление книги',
                            form=form)
@@ -117,6 +125,8 @@ def book_delete(id):
     if book:
         db_sess.delete(book)
         db_sess.commit()
+        disk.remove(f"/book/{book.file_name}")
+        disk.remove(f"/book/{book.marked_file_name}.csv")
     else:
         abort(404)
     return redirect('/')
@@ -133,12 +143,26 @@ def page(id):
 @app.route("/book_mark/<int:id>")
 def mark(id):
     db_sess = db_session.create_session()
-    book = db_sess.query(Books).filter(Books.id == id,
-                                       Books.user == current_user
+    book = db_sess.query(Books).filter(Books.id == id
                                        ).first()
+    a = list(disk.listdir("/book"))
+    print(*a)
     for i in a:
         if i['name'] == f"{book.marked_file_name}.csv":
-            url_ = i['file']
+            url_ = i['public_url']
+            return render_template('mark.html', url=url_)
+
+
+@app.route("/book_link/<int:id>")
+def load(id):
+    db_sess = db_session.create_session()
+    book = db_sess.query(Books).filter(Books.id == id
+                                       ).first()
+    a = list(disk.listdir("/book"))
+    print(*a)
+    for i in a:
+        if i['name'] == f"{book.file_name}":
+            url_ = i['public_url']
             return render_template('mark.html', url=url_)
 
 

@@ -3,7 +3,7 @@ import yadisk
 disk = yadisk.YaDisk(token='AQAAAABUIJphAAcUIlSKz5SMo0q9gbAxBIW03Uc')
 
 a = list(disk.listdir("/book"))
-print(*a)
+
 
 def folder():
     disk.mkdir('/book')
