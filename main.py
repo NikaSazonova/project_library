@@ -67,11 +67,15 @@ def add_book():
         current_user.books.append(book)
         db_sess.merge(current_user)
         db_sess.commit()
-        book_load(rf'C:\Users\Я\Desktop\yal\project_library\instance\{book.file_name}',
-                  f'{book.file_name}')
-        if marking(book.file_name):
-            book_load(rf'C:\Users\Я\Desktop\yal\project_library\instance\{book.marked_file_name}.csv',
-                      f'{book.marked_file_name}.csv')
+        book_load(os.path.join(
+            app.auto_find_instance_path(), form.file.data.filename), f'{book.file_name}')
+        path = os.path.join(
+            app.auto_find_instance_path(), form.file.data.filename)
+        path2 = os.path.join(
+            app.auto_find_instance_path(), f'{book.marked_file_name}.csv')
+        if marking(book.file_name, path, path2):
+            book_load(os.path.join(
+            app.auto_find_instance_path(), f'{book.marked_file_name}.csv'), f'{book.marked_file_name}.csv')
         disk.publish(f"/book/{book.file_name}")
         disk.publish(f"/book/{book.marked_file_name}.csv")
         return redirect('/')
@@ -105,6 +109,28 @@ def edit_book(id):
             book.author = form.author.data
             book.pic_url = form.pic_url.data
             book.content = form.content.data
+            if book.file_name != form.file.data.filename:
+                disk.remove(f"/book/{book.file_name}")
+                disk.remove(f"/book/{book.marked_file_name}.csv")
+                os.remove(os.path.join(
+                    app.auto_find_instance_path(), book.file_name))
+                os.remove(os.path.join(
+                    app.auto_find_instance_path(), f'{book.marked_file_name}.csv'))
+                book.file_name = form.file.data.filename
+                book.marked_file_name = f"marked_{form.file.data.filename}"
+                form.file.data.save(os.path.join(
+                    app.auto_find_instance_path(), form.file.data.filename))
+                book_load(os.path.join(
+                    app.auto_find_instance_path(), form.file.data.filename), f'{book.file_name}')
+                path = os.path.join(
+                    app.auto_find_instance_path(), form.file.data.filename)
+                path2 = os.path.join(
+                    app.auto_find_instance_path(), f'{book.marked_file_name}.csv')
+                if marking(book.file_name, path, path2):
+                    book_load(os.path.join(
+                        app.auto_find_instance_path(), f'{book.marked_file_name}.csv'), f'{book.marked_file_name}.csv')
+                disk.publish(f"/book/{book.file_name}")
+                disk.publish(f"/book/{book.marked_file_name}.csv")
             db_sess.commit()
             return redirect('/')
         else:

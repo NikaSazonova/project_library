@@ -2,6 +2,7 @@ import sys
 import pymorphy2
 import csv
 import string
+import os
 from chardet.universaldetector import UniversalDetector
 
 vowels = {'а', 'о', 'и', 'е', 'у', 'ю', 'ё', 'я', 'ы', 'э'}
@@ -21,19 +22,19 @@ encoding = [
 correct_encoding = ''
 
 
-def marking(file_name):
+def marking(file_name, path, path2):
     for enc in encoding:
         try:
-            open(rf'C:\Users\Я\Desktop\yal\project_library\instance\{file_name}', 'r', encoding=enc)
+            open(path, 'r', encoding=enc)
         except (UnicodeDecodeError, LookupError):
             pass
         else:
             correct_encoding = enc
     morph = pymorphy2.MorphAnalyzer()
-    f_open = open(rf'C:\Users\Я\Desktop\yal\project_library\instance\{file_name}', 'r', encoding=correct_encoding)
+    f_open = open(path, 'r', encoding=correct_encoding)
     name_res = f"marked_{file_name}"
     text = list()
-    f = open(rf'C:\Users\Я\Desktop\yal\project_library\instance\{name_res}.csv', 'w', newline='', encoding="cp1251")
+    f = open(path2, 'w', newline='', encoding="cp1251")
     writer = csv.writer(f, delimiter=';', quoting=csv.QUOTE_MINIMAL)
     writer.writerow(names)
     exclude = set(string.punctuation)
