@@ -75,7 +75,11 @@ def add_book():
             app.auto_find_instance_path(), f'{book.marked_file_name}.csv')
         if marking(book.file_name, path, path2):
             book_load(os.path.join(
-            app.auto_find_instance_path(), f'{book.marked_file_name}.csv'), f'{book.marked_file_name}.csv')
+                app.auto_find_instance_path(), f'{book.marked_file_name}.csv'), f'{book.marked_file_name}.csv')
+        os.remove(os.path.join(
+            app.auto_find_instance_path(), book.file_name))
+        os.remove(os.path.join(
+            app.auto_find_instance_path(), f'{book.marked_file_name}.csv'))
         disk.publish(f"/book/{book.file_name}")
         disk.publish(f"/book/{book.marked_file_name}.csv")
         return redirect('/')
@@ -112,10 +116,6 @@ def edit_book(id):
             if book.file_name != form.file.data.filename:
                 disk.remove(f"/book/{book.file_name}")
                 disk.remove(f"/book/{book.marked_file_name}.csv")
-                os.remove(os.path.join(
-                    app.auto_find_instance_path(), book.file_name))
-                os.remove(os.path.join(
-                    app.auto_find_instance_path(), f'{book.marked_file_name}.csv'))
                 book.file_name = form.file.data.filename
                 book.marked_file_name = f"marked_{form.file.data.filename}"
                 form.file.data.save(os.path.join(
@@ -129,6 +129,10 @@ def edit_book(id):
                 if marking(book.file_name, path, path2):
                     book_load(os.path.join(
                         app.auto_find_instance_path(), f'{book.marked_file_name}.csv'), f'{book.marked_file_name}.csv')
+                os.remove(os.path.join(
+                    app.auto_find_instance_path(), book.file_name))
+                os.remove(os.path.join(
+                    app.auto_find_instance_path(), f'{book.marked_file_name}.csv'))
                 disk.publish(f"/book/{book.file_name}")
                 disk.publish(f"/book/{book.marked_file_name}.csv")
             db_sess.commit()
