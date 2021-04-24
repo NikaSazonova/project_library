@@ -55,6 +55,9 @@ def add_book():
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         book = Books()
+        search_main = request.GET.get('search')
+        if search_main != '' or search_main != 'Поиск по книгам':
+            book_sort = search(search_main)
         book.title = form.title.data
         book.pic_url = form.pic_url.data
         book.author = form.author.data
