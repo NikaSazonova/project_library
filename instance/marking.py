@@ -3,35 +3,15 @@ import pymorphy2
 import csv
 import string
 import os
-from chardet.universaldetector import UniversalDetector
+r
 
 vowels = {'а', 'о', 'и', 'е', 'у', 'ю', 'ё', 'я', 'ы', 'э'}
 names = ['Слово', 'Часть речи', 'n - 1', 'n + 1', 'Род', 'Число', 'Падеж', 'Склонение']
-encoding = [
-    'utf-8',
-    'cp500',
-    'utf-16',
-    'GBK',
-    'windows-1251',
-    'ASCII',
-    'US-ASCII',
-    'Big5',
-    'ANSI'
-]
-
-correct_encoding = ''
 
 
 def marking(file_name, path, path2):
-    for enc in encoding:
-        try:
-            open(path, 'r', encoding=enc)
-        except (UnicodeDecodeError, LookupError):
-            pass
-        else:
-            correct_encoding = enc
     morph = pymorphy2.MorphAnalyzer()
-    f_open = open(path, 'r', encoding=correct_encoding)
+    f_open = open(path, 'r', encoding="utf-8")
     name_res = f"marked_{file_name}"
     text = list()
     f = open(path2, 'w', newline='', encoding="cp1251")

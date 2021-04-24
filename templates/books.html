@@ -45,7 +45,7 @@
             </p>
         {% endfor %}
     </p>
-        <p>{{form.file.label}}</p>
+        <p>{{form.file.label}} (.txt, кодировка - utf-8)</p>
         {{ form.file(class="form-control-file") }}<br>
         {% for error in form.file.errors %}
             <p content="alert alert-danger" role="alert">
