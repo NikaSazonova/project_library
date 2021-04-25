@@ -33,7 +33,7 @@ def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
-
+# главная страница библиотеки
 @app.route("/")
 def index():
     db_sess = db_session.create_session()
@@ -41,6 +41,7 @@ def index():
     return render_template("index.html", books=books)
 
 
+# поиск книг по запросу пользователя
 @app.route("/search")
 def search():
     empty = False
@@ -54,13 +55,18 @@ def search():
     return render_template("index_search.html", books=books, empty=empty)
 
 
+# выход пользователя из аккаунта
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect("/")
 
-
+# добавление книги: получение из формы всех данных объекта
+# файл при этом сначала сохраняется в папку instance на компьютер,
+# затем загружается на яндекс.диск (вместе с его размеченной версией)
+# и удаляется из папки instance; все файлы на яндекс.диске публикуются
+# (т.е. у них появляются публичные ссылки) для дальнейшей загрузки их пользователями
 @app.route('/book', methods=['GET', 'POST'])
 @login_required
 def add_book():
@@ -98,7 +104,9 @@ def add_book():
     return render_template('books.html', file_label='Файл книги (.txt)', title='Добавление книги',
                            form=form)
 
-
+# изменение книги: все данные, как и при добавлении, получаются из формы
+# и при изменении файла книги происходит то же, что при добавлении,
+# причем старая версия файла и его разметки удаляется с яндекс.диска
 @app.route('/book/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_book(id):
@@ -157,6 +165,7 @@ def edit_book(id):
                            )
 
 
+# удаление книги, в т.ч. файлов с яндекс.диска (разметки и файла книги)
 @app.route('/book_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def book_delete(id):
@@ -174,6 +183,7 @@ def book_delete(id):
     return redirect('/')
 
 
+# страница подробной информации о каждой книге
 @app.route("/book_page/<int:id>")
 def page(id):
     db_sess = db_session.create_session()
@@ -182,6 +192,9 @@ def page(id):
     return render_template("page.html", item=book)
 
 
+# страница скачивания размеченной версии книги:
+# a - список с информацией обо всех файлах в папке book на яндекс.диске,
+# по названию ищется нужный файл и извлекается публичная ссылка на него
 @app.route("/book_mark/<int:id>")
 def mark(id):
     db_sess = db_session.create_session()
@@ -195,6 +208,9 @@ def mark(id):
             return render_template('mark.html', url=url_, ok_pic=ok)
 
 
+# страница скачивания самого файла книги:
+# a - список с информацией обо всех файлах в папке book на яндекс.диске,
+# по названию ищется нужный файл и извлекается публичная ссылка на него
 @app.route("/book_link/<int:id>")
 def load(id):
     db_sess = db_session.create_session()
@@ -208,6 +224,7 @@ def load(id):
             return render_template('mark.html', url=url_, ok_pic=ok)
 
 
+# вход зарегистрированного пользователя на сайт
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -223,6 +240,7 @@ def login():
     return render_template('login.html', title='Авторизация', form=form)
 
 
+# регистрация пользователя на сайте
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
