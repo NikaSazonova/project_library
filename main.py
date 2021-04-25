@@ -1,5 +1,8 @@
 import datetime
 import os
+from urllib.parse import unquote
+import urllib.parse as urlparse
+import requests
 from instance.marking import marking
 from flask import Flask, request, abort, session, make_response, render_template, redirect, url_for
 from data import db_session
@@ -10,10 +13,8 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from data.book_download import book_load, book_download, folder
 from forms.book import BookForm
 import yadisk
-from data.search import search
 
 disk = yadisk.YaDisk(token='AQAAAABUIJphAAcUIlSKz5SMo0q9gbAxBIW03Uc')
-
 app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -25,6 +26,7 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 def main():
     db_session.global_init("db/library.db")
+    app.run()
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
 
@@ -39,9 +41,21 @@ def load_user(user_id):
 def index():
     db_sess = db_session.create_session()
     books = db_sess.query(Books)
-    search_main = request.GET.get('search')
-    if search_main != '' or search_main != 'Поиск по книгам':
-        books = db_sess.query(books).filter(books.title.like(f'%{search_main}%')).all()
+    # if request.json is not None:
+    #    search_main = request.json.get('search')
+    # else:
+    #    search_main = ''
+    # if search_main != '' or search_main != 'Поиск по книгам':
+    #    books = db_sess.query(books).filter(books.title.like(f'%{search_main}%')).all()
+    return render_template("index.html", books=books)
+
+
+@app.route("/search")
+def search():
+    db_sess = db_session.create_session()
+    req = str(request)
+    search_word = req[req.find('=') + 1:req.rfind("'")]
+    books = db_sess.query(Books).filter(Books.title.like(f'%{search_word}%')).all()
     return render_template("index.html", books=books)
 
 

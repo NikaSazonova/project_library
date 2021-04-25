@@ -3,7 +3,7 @@ import pymorphy2
 import csv
 import string
 import os
-r
+
 
 vowels = {'а', 'о', 'и', 'е', 'у', 'ю', 'ё', 'я', 'ы', 'э'}
 names = ['Слово', 'Часть речи', 'n - 1', 'n + 1', 'Род', 'Число', 'Падеж', 'Склонение']
