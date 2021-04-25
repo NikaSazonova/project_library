@@ -52,8 +52,7 @@ def search():
     db_sess = db_session.create_session()
     req = str(request)
     search_word = req[req.find('=') + 1:req.rfind("'")]
-    books = db_sess.query(Books).filter(Books.title.like(f'%{search_word}%')).all()
-    books_caps = db_sess.query(Books).filter(Books.title.like(f'%{search_word.capitalize()}%')).all()
+    books = db_sess.query(Books).filter(Books.title.like(f'%{search_word}% | %{search_word.capitalize()}%')).all()
     return render_template("index.html", books=books)
 
 
