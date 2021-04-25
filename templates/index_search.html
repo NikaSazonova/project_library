@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+   <style type="text/css">
+    p.dd {
+    width: 700px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    }
+ </style>
+ <style type="text/css">
+   TD.leftcol {
+    width: 180px; 
+    vertical-align: top; 
+   }
+   </style>
+<style>
+button {margin-right: 5px;}
+</style>
+</head>
+<h1 align="center">Результаты поиска</h1><br>
+    <form class="form-inline my-2 my-lg-0" action="/search">
+      <input class="form-control mr-sm-2" name="search" type="text" placeholder="Поиск по книгам"> <br>
+      <button class="btn btn-secondary my-2 my-sm-0" type="submit">Найти</button>
+    <a href="/" class="btn btn-info">
+          На главную
+</a>
+    </form><br>
+{% if not empty %}
+  {% for item in books%}
+    <div class="col-md6 border rounded">
+    <table width="100%" cellspacing="0" cellpadding="0">
+       <tr> 
+        <td class="leftcol"><img src="{{item.pic_url}}" 
+        width="170" height="210" alt="здесь должна была быть картинка, но не нашлась"></td>
+        <td valign="top"> <h2> {{item.title}} </h2> <p class="dd">{{item.content}}</p>
+        <p> Автор - {{item.author}}, Дата добавления - {{item.created_date}} </p> 
+           <div>
+           <a href="/book_page/{{ item.id }}"><right>Подробнее</right></a>
+           </div>
+        </td>
+       </tr>
+   </table>
+   {% if current_user.is_authenticated and current_user == item.user %}
+    <div>
+        <a href="/book/{{ item.id }}" class="btn btn-outline-info btn-sm">
+            Изменить
+        </a>
+        <a href="/book_delete/{{ item.id }}" class="btn btn-outline-danger btn-sm">
+            Удалить
+        </a>
+    </div>
+   {% endif %}
+    </div>
+    <p> </p>
+  {% endfor %}
+{% elif empty %}
+ <h3> Таких книг у нас пока нет :( </h3>
+{% endif %}
+{% endblock %}

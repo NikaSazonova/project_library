@@ -1,8 +1,5 @@
 import datetime
 import os
-from urllib.parse import unquote
-import urllib.parse as urlparse
-import requests
 from instance.marking import marking
 from flask import Flask, request, abort, session, make_response, render_template, redirect, url_for
 from data import db_session
@@ -52,11 +49,15 @@ def index():
 
 @app.route("/search")
 def search():
+    empty = False
     db_sess = db_session.create_session()
     req = str(request)
     search_word = req[req.find('=') + 1:req.rfind("'")]
-    books = db_sess.query(Books).filter(Books.title.like(f'%{search_word}%')).all()
-    return render_template("index.html", books=books)
+    books = db_sess.query(Books).filter(
+        Books.title.like(f'%{search_word}%') | Books.title.like(f'%{search_word.capitalize()}%')).all()
+    if not books:
+        empty = True
+    return render_template("index_search.html", books=books, empty=empty)
 
 
 @app.route('/logout')
