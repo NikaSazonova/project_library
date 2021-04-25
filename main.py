@@ -38,12 +38,6 @@ def load_user(user_id):
 def index():
     db_sess = db_session.create_session()
     books = db_sess.query(Books)
-    # if request.json is not None:
-    #    search_main = request.json.get('search')
-    # else:
-    #    search_main = ''
-    # if search_main != '' or search_main != 'Поиск по книгам':
-    #    books = db_sess.query(books).filter(books.title.like(f'%{search_main}%')).all()
     return render_template("index.html", books=books)
 
 
