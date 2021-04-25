@@ -1,8 +1,5 @@
 import datetime
 import os
-from urllib.parse import unquote
-import urllib.parse as urlparse
-import requests
 from instance.marking import marking
 from flask import Flask, request, abort, session, make_response, render_template, redirect, url_for
 from data import db_session
